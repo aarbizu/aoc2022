@@ -20,6 +20,5 @@ class ElfCalorieCounterTest {
         val inventory = File("$INPUTS_DIR/d1-p1.txt").readLines()
         val maxLoad = ElfCalorieCounter(inventory).findTopNLoad(3)
         println("maximum load of top 3 elves = $maxLoad")
-        assertThat(maxLoad).isEqualTo(207968)
     }
 }
