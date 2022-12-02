@@ -33,10 +33,10 @@ dependencies {
     implementation("com.google.guava:guava:31.1-jre")
     testImplementation("com.github.stefanbirkner:system-rules:1.19.0")
     testImplementation("com.google.truth:truth:1.1.3")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
-    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.0")
-    testRuntimeOnly("org.junit.platform:junit-platform-console:1.9.0")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.1")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:5.9.1")
+    testRuntimeOnly("org.junit.platform:junit-platform-console:1.9.1")
 }
 
 group = "org.aarbizu"

@@ -1,4 +1,4 @@
-package org.aarbizu.aoc2022.day_one
+package org.aarbizu.aoc2022.dayOne
 
 class ElfCalorieCounter(private val inventory: List<String>) {
 
