@@ -1,4 +1,4 @@
-package org.aarbizu.aoc2022.day_two
+package org.aarbizu.aoc2022.dayTwo
 
 class RockPaperScissors {
     fun evaluateGuide(strategyGuide: List<Pair<Move, Move>>): Long {
@@ -27,7 +27,7 @@ class RockPaperScissors {
 
 sealed interface Move {
     val value: Int
-    val moveToResult: Map<Move,Result>
+    val moveToResult: Map<Move, Result>
     val resultToMove: Map<Result, Move>
     fun vs(opp: Move): Result { return moveToResult[opp]!! }
     fun matchResult(res: Result): Move { return resultToMove[res]!! }
@@ -58,9 +58,9 @@ object Rock : Move {
 object Paper : Move {
     override val value = 2
     override val moveToResult = mapOf(
-            Rock to Win,
-            Paper to Draw,
-            Scissors to Lose
+        Rock to Win,
+        Paper to Draw,
+        Scissors to Lose
     )
     override val resultToMove = mapOf(
         Win to Scissors,
@@ -72,9 +72,9 @@ object Paper : Move {
 object Scissors : Move {
     override val value = 3
     override val moveToResult = mapOf(
-            Paper to Win,
-            Scissors to Draw,
-            Rock to Lose
+        Paper to Win,
+        Scissors to Draw,
+        Rock to Lose
     )
     override val resultToMove = mapOf(
         Win to Rock,
@@ -84,19 +84,19 @@ object Scissors : Move {
 }
 
 fun getMove(encodedMove: String): Move {
-    return when(encodedMove) {
+    return when (encodedMove) {
         "A", "X" -> Rock
         "B", "Y" -> Paper
         "C", "Z" -> Scissors
-        else -> { throw Exception("unknown move!")}
+        else -> { throw Exception("unknown move!") }
     }
 }
 
 fun getResult(encodedResult: String): Result {
-    return when(encodedResult) {
+    return when (encodedResult) {
         "X" -> Lose
         "Y" -> Draw
         "Z" -> Win
-        else -> { throw Exception("unknown result!")}
+        else -> { throw Exception("unknown result!") }
     }
 }

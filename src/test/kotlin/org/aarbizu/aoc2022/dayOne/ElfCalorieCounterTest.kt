@@ -1,4 +1,4 @@
-package org.aarbizu.aoc2022.day_one
+package org.aarbizu.aoc2022.dayOne
 
 import com.google.common.truth.Truth.assertThat
 import org.aarbizu.aoc2022.util.INPUTS_DIR
