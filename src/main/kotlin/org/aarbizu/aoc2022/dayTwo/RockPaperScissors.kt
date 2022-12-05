@@ -33,13 +33,11 @@ sealed interface Move {
     fun matchResult(res: Result): Move { return resultToMove[res]!! }
 }
 
-sealed interface Result {
-    val value: Int
-}
+sealed class Result(val value: Int)
 
-object Win : Result { override val value = 6 }
-object Draw : Result { override val value = 3 }
-object Lose : Result { override val value = 0 }
+object Win : Result(6)
+object Draw : Result(3)
+object Lose : Result(0)
 
 object Rock : Move {
     override val value = 1
@@ -88,7 +86,7 @@ fun getMove(encodedMove: String): Move {
         "A", "X" -> Rock
         "B", "Y" -> Paper
         "C", "Z" -> Scissors
-        else -> { throw Exception("unknown move!") }
+        else -> throw Exception("unknown move!")
     }
 }
 
@@ -97,6 +95,6 @@ fun getResult(encodedResult: String): Result {
         "X" -> Lose
         "Y" -> Draw
         "Z" -> Win
-        else -> { throw Exception("unknown result!") }
+        else -> throw Exception("unknown result!")
     }
 }
