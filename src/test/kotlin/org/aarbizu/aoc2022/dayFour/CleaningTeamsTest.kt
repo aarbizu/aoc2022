@@ -13,7 +13,6 @@ class CleaningTeamsTest {
         val cleanupTeams = pairings.map { Team.fromAssignment(it) }
         val overlappedTeams = CleaningTeams().getCountOfFullyOverlappingTeams(cleanupTeams)
         assertThat(overlappedTeams).isEqualTo(444).also { println("teams with overlapping assignments = $overlappedTeams") }
-
     }
 
     @Test
@@ -21,14 +20,14 @@ class CleaningTeamsTest {
         val pairings = File("$INPUTS_DIR/d4-p1.txt").readLines()
         val cleanupTeams = pairings.map { Team.fromAssignment(it) }
         val overlappedTeams = CleaningTeams().getCountOfAnyOverappingTeams(cleanupTeams)
-        assertThat(true).isTrue().also { println("teams with any overlap = $overlappedTeams")}
+        assertThat(overlappedTeams).isEqualTo(801).also { println("teams with any overlap = $overlappedTeams") }
     }
 
     @Test
     fun `test team`() {
         val team = Team.fromAssignment("30-31,2-31")
-        assertThat(team.rangeOne).isEqualTo((30 .. 31))
-        assertThat(team.rangeTwo).isEqualTo((2 .. 31))
+        assertThat(team.rangeOne).isEqualTo((30..31))
+        assertThat(team.rangeTwo).isEqualTo((2..31))
         assertThat(team.oneRangeFullyContainsTheOther()).isTrue()
     }
 }

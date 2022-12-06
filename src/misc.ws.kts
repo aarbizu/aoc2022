@@ -21,6 +21,11 @@ v2
 v3
 v4
 
+val regex2 = """\[(\w)\]\s[\s\[]([\s\w])[\s\]][\s\[]([\s\w])[\s\]][\s\[]([\s\w])[\s\]][\s\[]([\s\w])[\s\]][\s\[]([\s\w])[\s\]][\s\[]([\s\w])[\s\]][\s\[]([\s\w])[\s\]][\s\[]([\s\w])[\s\]]""".toRegex()
+regex2
+//val (x1, x2, x3, x4, x5, x6, x7, x8, x9) = regex2.find("[V]         [T]         [J]")!!.destructured
+
+
 
 
 
