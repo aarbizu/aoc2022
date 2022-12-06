@@ -14,7 +14,6 @@ class MutableStack<E>(vararg items: E) {
     fun isEmpty() = elements.isEmpty()
     fun size() = elements.size
     override fun toString() = "MutableStack(${elements.joinToString()})"
-
 }
 fun <E> mutableStackOf(vararg elements: E) = MutableStack(*elements)
 
@@ -31,7 +30,7 @@ fun <E> MutableStack<E>.multipop(numElements: Int): Collection<E> {
 }
 
 fun <E> MutableStack<E>.multipush(pushed: Collection<E>) {
-    for (n in pushed.size - 1 downTo  0) {
+    for (n in pushed.size - 1 downTo 0) {
         this.push(pushed.elementAt(n))
     }
 }

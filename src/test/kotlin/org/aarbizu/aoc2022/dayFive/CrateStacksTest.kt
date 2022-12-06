@@ -30,6 +30,7 @@ class CrateStacksTest {
         crateStacks.runMovesNew(moveList)
         crateStacks.getStacks().map { print(it.peek().label) }.also { println() }
     }
+
     @Test
     fun `parse input`() {
         val readLines = File("$INPUTS_DIR/d5-p1.txt").readLines()

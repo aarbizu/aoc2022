@@ -5,12 +5,11 @@ import org.aarbizu.aoc2022.util.multipop
 import org.aarbizu.aoc2022.util.multipush
 import org.aarbizu.aoc2022.util.mutableStackOf
 
-
 class CrateStacks(private val numStacks: Int, parsedCrates: List<Array<Crate>>) {
     private val stacks: List<MutableStack<Crate>> = List(numStacks) { mutableStackOf() }
 
     init {
-        for (n in 0 .. parsedCrates[0].lastIndex) {
+        for (n in 0..parsedCrates[0].lastIndex) {
             for (k in parsedCrates.indices) {
                 if (!parsedCrates[k][n].isEmpty()) {
                     stacks[n].push(parsedCrates[k][n])
@@ -55,6 +54,7 @@ class CrateStacks(private val numStacks: Int, parsedCrates: List<Array<Crate>>) 
 
     companion object {
         val movesRegex = """move (\d+) from (\d+) to (\d+)""".toRegex()
+
         // 9 crates of ('[x]') == 27, plus 8 spaces.  If last crate is not the 9th, might be shorter
         // crate1 = 0,*1*,2
         // crate2 = 4,*5*,6
@@ -64,7 +64,7 @@ class CrateStacks(private val numStacks: Int, parsedCrates: List<Array<Crate>>) 
             val crates = Array(numStacks) { emptyCrate }
             val cratesArray = line.toCharArray()
             var k = 0
-            for (i in 1 .. cratesArray.size step 4) {
+            for (i in 1..cratesArray.size step 4) {
                 crates[k++] = Crate.fromChar(cratesArray[i])
             }
             return crates
@@ -73,9 +73,13 @@ class CrateStacks(private val numStacks: Int, parsedCrates: List<Array<Crate>>) 
         fun getMoves(movesDesc: List<String>): List<Move> {
             return movesDesc
                 .map { movesRegex.find(it)!!.destructured }
-                .map { destructured ->  Move(destructured.component1().toInt(),
-                                             destructured.component2().toInt(),
-                                             destructured.component3().toInt()) }
+                .map { destructured ->
+                    Move(
+                        destructured.component1().toInt(),
+                        destructured.component2().toInt(),
+                        destructured.component3().toInt()
+                    )
+                }
                 .toList()
         }
     }
@@ -89,7 +93,7 @@ class Crate(val label: Char) {
         fun fromChar(c: Char): Crate {
             return when (c) {
                 ' ' -> emptyCrate
-                in 'A'.. 'Z' -> Crate(c)
+                in 'A'..'Z' -> Crate(c)
                 else -> throw Exception("unexpected crate label!")
             }
         }
@@ -101,4 +105,3 @@ class Crate(val label: Char) {
 }
 
 data class Move(val count: Int, val fromStack: Int, val toStack: Int)
-
