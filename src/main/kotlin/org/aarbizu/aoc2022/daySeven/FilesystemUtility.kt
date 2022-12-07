@@ -61,9 +61,9 @@ class FilesystemUtility {
 
     private fun computeSizeHelper(pfx: String, root: Directory, index: MutableMap<String, Long>): Long {
         var size = 0L
-        println("$pfx - ${root.name} parent = ${root.parent?.name}")
+        // println("$pfx - ${root.name} parent = ${root.parent?.name}")
         for (file in root.files) {
-            println("$pfx - ${file.name} ${file.size} parent = ${file.parent.name}")
+            // println("$pfx - ${file.name} ${file.size} parent = ${file.parent.name}")
             size += file.size
         }
 
@@ -71,7 +71,7 @@ class FilesystemUtility {
             size += computeSizeHelper("$pfx  ", dir, index)
         }
 
-        println("$pfx - dir ${root.name} $size")
+        // println("$pfx - dir ${root.name} $size")
         index[root.name] = size
         return size
     }

@@ -22,6 +22,32 @@ class FilesystemUtilityTest {
     }
 
     @Test
+    fun `part 2`() {
+        val commands = java.io.File("$INPUTS_DIR/d7-p1.txt").readLines()
+        val fs = FilesystemUtility()
+        val initDir = fs.processCommands(commands)
+        val sizeMap = mutableMapOf<String, Long>()
+        fs.computeSize(initDir.dirs[0], sizeMap)
+        assertThat(sizeMap).isNotEmpty()
+
+        val totalDisk = 70_000_000L
+        val minUpgradeSize = 30_000_000L
+        val currentlyUsed = sizeMap[".//"]!!
+
+        println("current used: $currentlyUsed, available: ${totalDisk - currentlyUsed}")
+
+        var minDeletable = Long.MAX_VALUE
+        sizeMap.entries.forEach {
+            if ((totalDisk - currentlyUsed + it.value) >= minUpgradeSize && it.value < minDeletable) {
+                minDeletable = it.value
+                println("new smallest usable dir = ${it.key}, ${it.value}")
+            }
+        }
+
+        assertThat(minDeletable).isEqualTo(13210366)
+    }
+
+    @Test
     fun `test command parsing`() {
         val commands = sample.lines()
         val fs = FilesystemUtility()
