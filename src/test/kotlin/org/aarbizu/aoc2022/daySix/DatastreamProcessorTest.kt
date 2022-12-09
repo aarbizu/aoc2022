@@ -23,6 +23,21 @@ class DatastreamProcessorTest {
     }
 
     @Test
+    fun `sample tests alt`() {
+        val sample1 = "bvwbjplbgvbhsrlpgdmjqwftvncz" // first marker after character 5
+        val sample2 = "nppdvjthqldpwncqszvftbrmjlhg" // first marker after character 6
+        val sample3 = "nznrnfrfntjfmvfwmzdfjlvtqnbhcprsg" // first marker after character 10
+        val sample4 = "zcfzfwzzqfrljwzlrfnpqdbhtmscgvjw" // first marker after character 11
+
+        val processor = DatastreamProcessor(4)
+
+        assertThat(processor.ingest2(sample1).second).isEqualTo(5)
+        assertThat(processor.ingest2(sample2).second).isEqualTo(6)
+        assertThat(processor.ingest2(sample3).second).isEqualTo(10)
+        assertThat(processor.ingest2(sample4).second).isEqualTo(11)
+    }
+
+    @Test
     fun `part one`() {
         val bufferContents = File("$INPUTS_DIR/d6-p1.txt").readLines()
         val processor = DatastreamProcessor(4)
@@ -32,11 +47,29 @@ class DatastreamProcessorTest {
     }
 
     @Test
+    fun `part one alt`() {
+        val bufferContents = File("$INPUTS_DIR/d6-p1.txt").readLines()
+        val processor = DatastreamProcessor(4)
+
+        val tokenPosition = processor.ingest2(bufferContents[0])
+        assertThat(tokenPosition.second).isEqualTo(1042).also { println("start-of-packet marker @ $tokenPosition") }
+    }
+
+    @Test
     fun `part two`() {
         val bufferContents = File("$INPUTS_DIR/d6-p1.txt").readLines()
         val processor = DatastreamProcessor(14)
 
         val tokenPosition = processor.ingest(bufferContents[0])
         assertThat(tokenPosition).isEqualTo(2980).also { println("start-of-packet marker @ $tokenPosition") }
+    }
+
+    @Test
+    fun `part two alt`() {
+        val bufferContents = File("$INPUTS_DIR/d6-p1.txt").readLines()
+        val processor = DatastreamProcessor(14)
+
+        val tokenPosition = processor.ingest2(bufferContents[0])
+        assertThat(tokenPosition.second).isEqualTo(2980).also { println("start-of-packet marker @ $tokenPosition") }
     }
 }

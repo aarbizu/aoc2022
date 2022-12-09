@@ -23,6 +23,17 @@ class DatastreamProcessor(private val windowSize: Int) {
         return -1
     }
 
+    fun ingest2(buffer: String): Pair<String,Int> {
+        return buffer
+            .windowed(windowSize)
+            .withIndex().first { noneMatch(it.value, it.index).first }
+            .let { println("found ${it.value} at ${it.index + windowSize}"); Pair(it.value, it.index + windowSize) }
+    }
+
+    private fun noneMatch(s: String, i: Int): Pair<Boolean,Int> {
+       return Pair(noneMatch(s.toList()), i)
+    }
+
     private fun noneMatch(chars: List<Char>): Boolean {
         val map = mutableMapOf<Char, Int>()
         for (c in chars) {
