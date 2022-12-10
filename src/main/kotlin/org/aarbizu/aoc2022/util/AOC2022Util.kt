@@ -181,11 +181,11 @@ class IntGrid(val gridContents: List<MutableList<Int>>) {
 
     fun getGridSet(): Set<GridSquare<Int>> {
         return gridContents
-            .flatMapIndexed {
-                    row: Int, colValues: MutableList<Int> -> colValues
-                        .mapIndexed {
-                                col: Int, _ -> at(row, col)!!
-                        }
+            .flatMapIndexed { row: Int, colValues: MutableList<Int> ->
+                colValues
+                .mapIndexed { col: Int, _ ->
+                    at(row, col)!!
+                }
             }.toSet()
     }
 

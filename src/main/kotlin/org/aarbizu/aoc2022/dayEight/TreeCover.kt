@@ -32,15 +32,15 @@ class TreeCover {
         var leftScore = 0
         do {
             col -= 1
-            if (forest[row,col] != -1) {
-                if (forest[row,col] < height) {
+            if (forest[row, col] != -1) {
+                if (forest[row, col] < height) {
                     leftScore++
                 } else {
                     leftScore++
                     break
                 }
             }
-        } while (forest[row,col] != -1)
+        } while (forest[row, col] != -1)
 
         row = tree.row
         col = tree.col
@@ -48,15 +48,15 @@ class TreeCover {
         var rightScore = 0
         do {
             col += 1
-            if (forest[row,col] != -1) {
-                if (forest[row,col] < height) {
+            if (forest[row, col] != -1) {
+                if (forest[row, col] < height) {
                     rightScore++
                 } else {
                     rightScore++
                     break
                 }
             }
-        } while (forest[row,col] != -1)
+        } while (forest[row, col] != -1)
 
         row = tree.row
         col = tree.col
@@ -64,30 +64,30 @@ class TreeCover {
         var upScore = 0
         do {
             row -= 1
-            if (forest[row,col] != -1) {
-                if (forest[row,col] < height) {
+            if (forest[row, col] != -1) {
+                if (forest[row, col] < height) {
                     upScore++
                 } else {
                     upScore++
                     break
                 }
             }
-        } while (forest[row,col] != -1)
+        } while (forest[row, col] != -1)
 
         row = tree.row
         col = tree.col
         var downScore = 0
         do {
             row += 1
-            if (forest[row,col] != -1) {
-                if (forest[row,col] < height) {
+            if (forest[row, col] != -1) {
+                if (forest[row, col] < height) {
                     downScore++
                 } else {
                     downScore++
                     break
                 }
             }
-        } while (forest[row,col] != -1)
+        } while (forest[row, col] != -1)
 
         return listOf(leftScore, rightScore, upScore, downScore)
             .filter { it > 0 }
@@ -103,10 +103,10 @@ class TreeCover {
         var leftVisible = true
         do {
             col -= 1
-            if (forest[row,col] >= height) {
+            if (forest[row, col] >= height) {
                 leftVisible = false
             }
-        } while (forest[row,col] != -1)
+        } while (forest[row, col] != -1)
 
         row = tree.row
         col = tree.col
@@ -114,10 +114,10 @@ class TreeCover {
         var rightVisible = true
         do {
             col += 1
-            if (forest[row,col] >= height) {
+            if (forest[row, col] >= height) {
                 rightVisible = false
             }
-        } while ((forest[row,col] != -1))
+        } while ((forest[row, col] != -1))
 
         row = tree.row
         col = tree.col
@@ -125,10 +125,10 @@ class TreeCover {
         var topVisible = true
         do {
             row += 1
-            if (forest[row,col] >= height) {
+            if (forest[row, col] >= height) {
                 topVisible = false
             }
-        } while ((forest[row,col] != -1))
+        } while ((forest[row, col] != -1))
 
         row = tree.row
         col = tree.col
@@ -136,10 +136,10 @@ class TreeCover {
         var bottomVisible = true
         do {
             row -= 1
-            if (forest[row,col] >= height) {
+            if (forest[row, col] >= height) {
                 bottomVisible = false
             }
-        } while ((forest[row,col] != -1) )
+        } while ((forest[row, col] != -1))
 
         return leftVisible || rightVisible || topVisible || bottomVisible
     }

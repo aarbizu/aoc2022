@@ -31,11 +31,11 @@ class TreeCoverTest {
         val perimeterSet = grid.perimeter()
         val toBeEvaluated = gridSet - perimeterSet
         assertThat(toBeEvaluated.size).isEqualTo(9)
-        assertThat(toBeEvaluated.map { it.value }).containsExactly(5,5,1,5,3,3,3,5,4)
+        assertThat(toBeEvaluated.map { it.value }).containsExactly(5, 5, 1, 5, 3, 3, 3, 5, 4)
     }
 
     @Test
-    fun sample () {
+    fun sample() {
         val visible = TreeCover().findVisibleTrees(sample.lines())
         assertThat(visible.size).isEqualTo(21)
     }
