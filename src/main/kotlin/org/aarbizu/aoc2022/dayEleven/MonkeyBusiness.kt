@@ -14,16 +14,15 @@ class MonkeyBusiness {
 
         repeat(totalRounds) {
             monkeys.forEach { m ->
-                m.items.forEach {
+                m.items.map {
                     m.inspections++
-                    val nextItemAndDivisibilityCheck =
-                        m.transformAndCheckDivisibility(it, commonDivisor, worryReductionMode)
-                    if (nextItemAndDivisibilityCheck.second) {
-                        monkeys[m.trueMonkey].items.add(nextItemAndDivisibilityCheck.first)
+                    val nextItemAndIsDivisable = m.getNextAndCheck(it, commonDivisor, worryReductionMode)
+                    if (nextItemAndIsDivisable.second) {
+                        (m.trueMonkey to nextItemAndIsDivisable.first)
                     } else {
-                        monkeys[m.falseMonkey].items.add(nextItemAndDivisibilityCheck.first)
+                        (m.falseMonkey to nextItemAndIsDivisable.first)
                     }
-                }.also { m.items.clear() }
+                }.forEach { monkeys[it.first].items.add(it.second) }.also { m.items.clear() }
             }
         }
     }
@@ -90,7 +89,7 @@ data class Monkey(
         return "$id[i:$inspections][d:$divisibility,t:$trueMonkey,f:$falseMonkey] => ${items.joinToString(",")}"
     }
 
-    fun transformAndCheckDivisibility(item: Long, commonDivisor: Int, worryReduction: Boolean): Pair<Long, Boolean> {
+    fun getNextAndCheck(item: Long, commonDivisor: Int, worryReduction: Boolean): Pair<Long, Boolean> {
         val nextItem = if (worryReduction) (worryTransform(item) / 3) % commonDivisor else worryTransform(item) % commonDivisor
         return Pair(nextItem, nextItem % divisibility == 0L)
     }
