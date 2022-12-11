@@ -183,9 +183,9 @@ class IntGrid(val gridContents: List<MutableList<Int>>) {
         return gridContents
             .flatMapIndexed { row: Int, colValues: MutableList<Int> ->
                 colValues
-                .mapIndexed { col: Int, _ ->
-                    at(row, col)!!
-                }
+                    .mapIndexed { col: Int, _ ->
+                        at(row, col)!!
+                    }
             }.toSet()
     }
 

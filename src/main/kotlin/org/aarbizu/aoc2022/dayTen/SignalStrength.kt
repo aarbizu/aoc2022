@@ -43,7 +43,7 @@ data class SystemState(var registers: Map<String, Register>, val clock: Clock, v
     }
 
     fun writePixel() {
-        if(spriteVisible()) {
+        if (spriteVisible()) {
             crt[crtPtr++] = '#'
         } else {
             crt[crtPtr++] = '.'
@@ -75,7 +75,7 @@ data class SystemState(var registers: Map<String, Register>, val clock: Clock, v
 
 data class Clock(var tick: Int = 1)
 data class Register(val label: String, var value: Int) {
-    var log = mutableListOf<Pair<Int,Int>>()
+    var log = mutableListOf<Pair<Int, Int>>()
 }
 
 sealed interface Instruction {
