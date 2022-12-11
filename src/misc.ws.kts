@@ -27,7 +27,4 @@ val s = StringBuilder()
 
 (1..10).forEach { s.append("t")}
 
-s
-
-
 
