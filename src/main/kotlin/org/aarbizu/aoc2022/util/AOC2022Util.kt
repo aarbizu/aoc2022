@@ -40,10 +40,19 @@ fun <E> MutableStack<E>.multipush(pushed: Collection<E>) {
  * see https://github.com/aarbizu/aoc2021/blob/main/src/main/kotlin/org/aarbizu/aoc2021/util/Aoc2021Utils.kt
  **/
 
-fun printGrid(input: List<List<Any>>): String {
+fun gridToString(input: List<List<Any>>): String {
     return input.joinToString("\n") { it.joinToString("") }
 }
-fun parseGrid(input: List<String>): IntGrid {
+
+fun parseToCharGrid(input: List<String>): CharGrid {
+    return CharGrid(
+        input.map {
+            it.trim().toList().toMutableList()
+        }
+    )
+}
+
+fun parseToIntGrid(input: List<String>): IntGrid {
     return IntGrid(
         input.map {
             it.trim().toList().map { d -> d.digitToInt() }.toMutableList()
@@ -51,17 +60,17 @@ fun parseGrid(input: List<String>): IntGrid {
     )
 }
 
-class IntGrid(val gridContents: List<MutableList<Int>>) {
+abstract class Grid<T>(open val contents: List<MutableList<T>>) {
     val rows: Int
-        get() = gridContents.size
+        get() = contents.size
     val cols: Int
-        get() = gridContents[0].size
+        get() = contents[0].size
 
-    private fun outOfBounds(r: Int, c: Int): Boolean {
+    fun outOfBounds(r: Int, c: Int): Boolean {
         return (r < 0 || r >= rows || c < 0 || c >= cols)
     }
 
-    fun at(r: Int, c: Int): GridSquare<Int>? {
+    fun at(r: Int, c: Int): GridSquare<T>? {
         return if (outOfBounds(r, c)) {
             null
         } else {
@@ -69,49 +78,36 @@ class IntGrid(val gridContents: List<MutableList<Int>>) {
         }
     }
 
-    fun inc(r: Int, c: Int) {
+    fun set(r: Int, c: Int, value: T) {
         if (outOfBounds(r, c)) { return }
-        gridContents[r][c]++
+        contents[r][c] = value
     }
 
-    fun set(r: Int, c: Int, value: Int) {
-        if (outOfBounds(r, c)) { return }
-        gridContents[r][c] = value
+    open operator fun get(r: Int, c: Int): T? {
+        return if (outOfBounds(r, c)) null else contents[r][c]
     }
 
-    operator fun get(r: Int, c: Int): Int {
-        return if (outOfBounds(r, c)) -1 else gridContents[r][c]
+    fun gridValue(row: Int, col: Int): GridSquare<T> {
+        return GridSquare(row, col, contents[row][col])
     }
 
-    fun search(clause: (Int) -> Boolean): List<GridSquare<Int>> {
-        val matching = mutableListOf<GridSquare<Int>>()
-        for (i in 0 until rows) {
-            for (j in 0 until cols) {
-                if (clause.invoke(gridContents[i][j])) {
-                    at(i, j)?.also { matching.add(it) }
-                }
-            }
-        }
-        return matching
-    }
-
-    fun getNonDiagonalNeighbors(r: Int, c: Int): List<GridSquare<Int>?> {
+    fun getNonDiagonalNeighbors(r: Int, c: Int): List<GridSquare<T>?> {
         return listOf(above(r, c), below(r, c), left(r, c), right(r, c))
     }
 
-    fun getNonDiagonalNeighbors(r: Int, c: Int, threshold: Int): List<GridSquare<Int>> {
-        return getNonDiagonalNeighbors(r, c).filterNotNull().filterNot { it.value == threshold }
+    fun getNonDiagonalNeighbors(r: Int, c: Int, predicate: (T) -> Boolean): List<GridSquare<T>> {
+        return getNonDiagonalNeighbors(r, c).filterNotNull().filterNot { predicate(it.value) }
     }
 
-    fun getDiagonalNeighbors(r: Int, c: Int): List<GridSquare<Int>?> {
+    fun getDiagonalNeighbors(r: Int, c: Int): List<GridSquare<T>?> {
         return listOf(aboveRight(r, c), aboveLeft(r, c), belowRight(r, c), belowLeft(r, c))
     }
 
-    fun getAllNeighbors(r: Int, c: Int): List<GridSquare<Int>?> {
+    fun getAllNeighbors(r: Int, c: Int): List<GridSquare<T>?> {
         return getNonDiagonalNeighbors(r, c) + getDiagonalNeighbors(r, c)
     }
 
-    fun aboveRight(row: Int, col: Int): GridSquare<Int>? {
+    fun aboveRight(row: Int, col: Int): GridSquare<T>? {
         return if (row <= 0 || col >= cols - 1) {
             null
         } else {
@@ -119,7 +115,7 @@ class IntGrid(val gridContents: List<MutableList<Int>>) {
         }
     }
 
-    fun aboveLeft(row: Int, col: Int): GridSquare<Int>? {
+    fun aboveLeft(row: Int, col: Int): GridSquare<T>? {
         return if (row <= 0 || col <= 0) {
             null
         } else {
@@ -127,7 +123,7 @@ class IntGrid(val gridContents: List<MutableList<Int>>) {
         }
     }
 
-    fun belowRight(row: Int, col: Int): GridSquare<Int>? {
+    fun belowRight(row: Int, col: Int): GridSquare<T>? {
         return if (row >= rows - 1 || col >= cols - 1) {
             null
         } else {
@@ -135,7 +131,7 @@ class IntGrid(val gridContents: List<MutableList<Int>>) {
         }
     }
 
-    fun belowLeft(row: Int, col: Int): GridSquare<Int>? {
+    fun belowLeft(row: Int, col: Int): GridSquare<T>? {
         return if (row >= rows - 1 || col <= 0) {
             null
         } else {
@@ -143,7 +139,7 @@ class IntGrid(val gridContents: List<MutableList<Int>>) {
         }
     }
 
-    fun above(row: Int, col: Int): GridSquare<Int>? {
+    fun above(row: Int, col: Int): GridSquare<T>? {
         return if (row <= 0) {
             null
         } else {
@@ -151,7 +147,7 @@ class IntGrid(val gridContents: List<MutableList<Int>>) {
         }
     }
 
-    fun below(row: Int, col: Int): GridSquare<Int>? {
+    fun below(row: Int, col: Int): GridSquare<T>? {
         return if (row >= rows - 1) {
             null
         } else {
@@ -159,15 +155,11 @@ class IntGrid(val gridContents: List<MutableList<Int>>) {
         }
     }
 
-    fun left(row: Int, col: Int): GridSquare<Int>? {
-        return if (col <= 0) {
-            null
-        } else {
-            gridValue(row, col - 1)
-        }
+    fun left(row: Int, col: Int): GridSquare<T>? {
+        return if (col <= 0) null else { gridValue(row, col - 1) }
     }
 
-    fun right(row: Int, col: Int): GridSquare<Int>? {
+    fun right(row: Int, col: Int): GridSquare<T>? {
         return if (col >= cols - 1) {
             null
         } else {
@@ -175,25 +167,17 @@ class IntGrid(val gridContents: List<MutableList<Int>>) {
         }
     }
 
-    fun gridValue(row: Int, col: Int): GridSquare<Int> {
-        return GridSquare(row, col, gridContents[row][col])
+    fun getGridSet(): Set<GridSquare<T>> {
+        return contents.flatMapIndexed { row: Int, colValues: MutableList<T> ->
+            colValues.mapIndexed { col: Int, _ -> at(row, col)!! }
+        }.toSet()
     }
 
-    fun getGridSet(): Set<GridSquare<Int>> {
-        return gridContents
-            .flatMapIndexed { row: Int, colValues: MutableList<Int> ->
-                colValues
-                    .mapIndexed { col: Int, _ ->
-                        at(row, col)!!
-                    }
-            }.toSet()
-    }
-
-    fun perimeter(): Set<GridSquare<Int>> {
-        val gridSquareSet = mutableSetOf<GridSquare<Int>>()
+    fun perimeter(): Set<GridSquare<T>> {
+        val gridSquareSet = mutableSetOf<GridSquare<T>>()
 
         (0 until cols).forEach { gridSquareSet.add(gridValue(0, it)) }
-        (0 until cols).forEach { gridSquareSet.add(gridValue(gridContents.lastIndex, it)) }
+        (0 until cols).forEach { gridSquareSet.add(gridValue(contents.lastIndex, it)) }
         (0 until rows).forEach { gridSquareSet.add(gridValue(it, 0)) }
         (0 until rows).forEach { gridSquareSet.add(gridValue(it, cols - 1)) }
 
@@ -201,16 +185,37 @@ class IntGrid(val gridContents: List<MutableList<Int>>) {
     }
 
     override fun toString(): String {
-        return gridContents.joinToString("\n") { list -> list.joinToString("") }
+        return contents.joinToString("\n") { list -> list.joinToString("") }
+    }
+
+    fun search(clause: (T) -> Boolean): List<GridSquare<T>> {
+        val matching = mutableListOf<GridSquare<T>>()
+        for (i in 0 until rows) {
+            for (j in 0 until cols) {
+                if (clause.invoke(contents[i][j])) {
+                    at(i, j)?.also { matching.add(it) }
+                }
+            }
+        }
+        return matching
     }
 }
+
+class IntGrid(override val contents: List<MutableList<Int>>) : Grid<Int>(contents) {
+    override operator fun get(r: Int, c: Int): Int {
+        return if (outOfBounds(r, c)) -1 else contents[r][c]
+    }
+}
+
+class CharGrid(override val contents: List<MutableList<Char>>) : Grid<Char>(contents)
 
 data class GridSquare<T>(val row: Int, val col: Int, var value: T) {
     var shortestPath: List<GridSquare<T>> = emptyList()
 
     override fun toString(): String {
-        return "$row,$col"
+        return "[$row,$col]=$value"
     }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (javaClass != other?.javaClass) return false
@@ -219,6 +224,7 @@ data class GridSquare<T>(val row: Int, val col: Int, var value: T) {
 
         if (row != other.row) return false
         if (col != other.col) return false
+        if (value != other.value) return false
 
         return true
     }
@@ -226,6 +232,7 @@ data class GridSquare<T>(val row: Int, val col: Int, var value: T) {
     override fun hashCode(): Int {
         var result = row
         result = 31 * result + col
+        result = 31 * result + (value?.hashCode() ?: 0)
         return result
     }
 }
