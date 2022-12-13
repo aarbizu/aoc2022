@@ -2,11 +2,11 @@ package org.aarbizu.aoc2022.dayEight
 
 import org.aarbizu.aoc2022.util.GridSquare
 import org.aarbizu.aoc2022.util.IntGrid
-import org.aarbizu.aoc2022.util.parseGrid
+import org.aarbizu.aoc2022.util.parseToIntGrid
 
 class TreeCover {
     fun findVisibleTrees(gridAsStrings: List<String>): List<GridSquare<Int>> {
-        val theGrid = parseGrid(gridAsStrings)
+        val theGrid = parseToIntGrid(gridAsStrings)
 
         val perimeterSet = theGrid.perimeter()
         val toBeEvaluated = theGrid.getGridSet() - perimeterSet
@@ -17,7 +17,7 @@ class TreeCover {
     }
 
     fun maxVisibilityScore(gridAsStrings: List<String>): Int {
-        val theGrid = parseGrid(gridAsStrings)
+        val theGrid = parseToIntGrid(gridAsStrings)
 
         val perimeterSet = theGrid.perimeter()
         val toBeEvaluated = theGrid.getGridSet() - perimeterSet

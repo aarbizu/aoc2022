@@ -2,7 +2,7 @@ package org.aarbizu.aoc2022.dayEight
 
 import com.google.common.truth.Truth.assertThat
 import org.aarbizu.aoc2022.util.INPUTS_DIR
-import org.aarbizu.aoc2022.util.parseGrid
+import org.aarbizu.aoc2022.util.parseToIntGrid
 import org.junit.jupiter.api.Test
 import java.io.File
 
@@ -10,13 +10,13 @@ class TreeCoverTest {
 
     @Test
     fun `parsing to grid`() {
-        val grid = parseGrid(sample.lines())
+        val grid = parseToIntGrid(sample.lines())
         assertThat(grid).isNotNull()
     }
 
     @Test
     fun `count perimeter`() {
-        val grid = parseGrid(sample.lines())
+        val grid = parseToIntGrid(sample.lines())
         assertThat(grid.perimeter().count())
             .isEqualTo(16)
             .also { println("visible (perimeter trees) = ${grid.perimeter().count()}") }
@@ -24,7 +24,7 @@ class TreeCoverTest {
 
     @Test
     fun `count visible in sample`() {
-        val grid = parseGrid(sample.lines())
+        val grid = parseToIntGrid(sample.lines())
         val gridSet = grid.getGridSet()
         assertThat(gridSet.size).isEqualTo(25)
 
