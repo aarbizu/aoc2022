@@ -1,10 +1,12 @@
 package org.aarbizu.aoc2022.daySeven
 
 class FilesystemUtility {
+
     fun processCommands(output: List<String>): Directory {
+        var init = Directory(".", null)
         var pos = 0
         val cmdBuffer = Array(3) { "" }
-        var cwd = INIT
+        var cwd = init
         while (pos <= output.lastIndex) {
             if (output[pos].startsWith("$")) {
                 // ignore the '$"
@@ -23,7 +25,7 @@ class FilesystemUtility {
                             ?: Directory(cwd.name + "/" + cmdBuffer[1], cwd)
                     }
                     if (cmdBuffer[1] == "/") {
-                        INIT.dirs.add(cwd)
+                        init.dirs.add(cwd)
                     }
                     pos++
                 }
@@ -38,7 +40,7 @@ class FilesystemUtility {
                 else -> throw Exception("unknown command!")
             }
         }
-        return INIT
+        return init
     }
 
     private fun processOutput(lines: List<String>, dir: Directory) {
@@ -76,6 +78,7 @@ class FilesystemUtility {
         return size
     }
 }
+
 operator fun Regex.contains(text: CharSequence): Boolean = this.matches(text)
 sealed interface FsObject {
     val name: String
@@ -83,8 +86,7 @@ sealed interface FsObject {
     val size: Long
 }
 
-var INIT = Directory(".", null)
-open class Directory(override val name: String, override val parent: Directory?) : FsObject {
+class Directory(override val name: String, override val parent: Directory?) : FsObject {
     override var size: Long = 0
     val dirs = mutableListOf<Directory>()
     val files = mutableListOf<File>()

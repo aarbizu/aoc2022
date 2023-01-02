@@ -4,10 +4,7 @@ import com.google.common.truth.Truth.assertThat
 import org.aarbizu.aoc2022.util.INPUTS_DIR
 import org.junit.jupiter.api.Test
 import java.io.File
-import kotlin.time.DurationUnit
-import kotlin.time.ExperimentalTime
-import kotlin.time.TimeSource
-import kotlin.time.measureTime
+import kotlin.system.measureNanoTime
 
 class FallingSandTest {
     val sample = """
@@ -29,17 +26,14 @@ class FallingSandTest {
         println(falling.cavern.atRest())
     }
 
-    @OptIn(ExperimentalTime::class)
     @Test
     fun `part one`() {
-        val falling = FallingSand(File("$INPUTS_DIR/d14-p1.txt").readLines())
-
-        TimeSource.Monotonic.measureTime {
+        measureNanoTime {
+            val falling = FallingSand(File("$INPUTS_DIR/d14-p1.txt").readLines())
             falling.sand()
-        }.let { println("took ${it.toDouble(DurationUnit.MILLISECONDS)} ms") }
-
-        val atRest = falling.cavern.atRest()
-        assertThat(atRest).isEqualTo(799).also { println(atRest) }
+            val atRest = falling.cavern.atRest()
+            assertThat(atRest).isEqualTo(799).also { println(atRest) }
+        }.let { println("took ${it / 1_000_000.0} ms") }
     }
 
     @Test
@@ -50,15 +44,14 @@ class FallingSandTest {
         println(falling.cavern.atRest())
     }
 
-    @OptIn(ExperimentalTime::class)
     @Test
     fun `part two`() {
-        val falling = FallingSand(File("$INPUTS_DIR/d14-p1.txt").readLines())
-        TimeSource.Monotonic.measureTime {
+        measureNanoTime {
+            val falling = FallingSand(File("$INPUTS_DIR/d14-p1.txt").readLines())
             falling.sandWithFloor()
-        }.let { println("took ${it.toDouble(DurationUnit.MILLISECONDS)} ms") }
-
-        val atRest = falling.cavern.atRest()
-        println("sand = $atRest")
+            val atRest = falling.cavern.atRest()
+//            println("sand = $atRest")
+            assertThat(atRest).isEqualTo(29076)
+        }.let { println("took ${it / 1_000_000.0} ms") }
     }
 }

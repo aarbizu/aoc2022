@@ -41,7 +41,7 @@ class DistressSignalTest {
     @Test
     fun `part one`() {
         val ordered = DistressSignal().comparePackets(File("$INPUTS_DIR/d13-p1.txt").readLines())
-        assertThat(ordered).isGreaterThan(4894).also { println("$ordered") }
+        assertThat(ordered).isEqualTo(4894).also { println("$ordered") }
     }
 
     @Test

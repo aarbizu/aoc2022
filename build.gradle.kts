@@ -68,6 +68,8 @@ spotless {
 }
 
 tasks.withType<Test> {
+    minHeapSize = "1024m"
+    maxHeapSize = "4096m"
     useJUnitPlatform()
     testLogging {
         events = setOf(PASSED, FAILED, SKIPPED)
