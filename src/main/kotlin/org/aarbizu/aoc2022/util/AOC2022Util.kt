@@ -36,7 +36,7 @@ fun <E> MutableStack<E>.multipush(pushed: Collection<E>) {
 }
 
 /**
- * Int Grid
+ * Grid<T>/GridSquare<T> for when the contents at grid locations needs to be non-trivial
  * see https://github.com/aarbizu/aoc2021/blob/main/src/main/kotlin/org/aarbizu/aoc2021/util/Aoc2021Utils.kt
  **/
 
@@ -236,3 +236,75 @@ data class GridSquare<T>(val row: Int, val col: Int, var value: T) {
         return result
     }
 }
+
+/**
+ * SimpleGrid<T>, for when the dimensions need to be more flexible than List/Arrays provide
+ * Int-based x,y coordinates
+ */
+abstract class SimpleGrid<T>(
+    var minX: Int,
+    var maxX: Int,
+    var minY: Int,
+    var maxY: Int
+) {
+    val points: MutableMap<Int, MutableMap<Int, T>> = mutableMapOf()
+
+    fun add(x: Int, y: Int, value: T) {
+        updateMinMax(x, y)
+        points.getOrPut(y) { mutableMapOf() }[x] = value
+    }
+
+    fun get(x: Int, y: Int): T? {
+        return points[y]?.get(x)
+    }
+
+    private fun updateMinMax(x: Int, y: Int) {
+        updateMinMaxX(x)
+        updateMinMaxY(y)
+    }
+
+    private fun updateMinMaxX(x: Int) {
+        if (x < minX) minX = x
+        if (x > maxX) maxX = x
+    }
+
+    private fun updateMinMaxY(y: Int) {
+        if (y > maxY) maxY = y
+        if (y < minY) minY = y
+    }
+
+    fun print() {
+        for (y in minY..maxY) {
+            for (x in minX..maxX) {
+                if (points[y]?.get(x) != null) {
+                    output(points[y]?.get(x))
+                } else {
+                    outputUnoccupied(".")
+                }
+            }
+            println()
+        }
+    }
+
+    open fun output(contents: T?) {
+        contents?.let { print(" $it ") }
+    }
+
+    open fun outputUnoccupied(s: Any?) {
+        s?.let { print(" $it ") }
+    }
+}
+
+fun List<IntRange>.collapse(): List<IntRange> =
+    if (this.size <= 1) this
+    else {
+        val sorted = this.sortedBy { it.first }
+        sorted.drop(1).fold(mutableListOf(sorted.first())) { reduced, range ->
+            val lastRange = reduced.last()
+            if (range.first <= lastRange.last)
+                reduced[reduced.lastIndex] = (lastRange.first..maxOf(lastRange.last, range.last))
+            else
+                reduced.add(range)
+            reduced
+        }
+    }

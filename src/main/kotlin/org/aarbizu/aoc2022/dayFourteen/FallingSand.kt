@@ -32,7 +32,7 @@ class FallingSand(private val rockScan: List<String>) {
         while (!(restLocation.x == 500 && restLocation.y == 0)) {
             val sandGrain = Point(500, 0)
             restLocation = cavern.fallToFloor(sandGrain)
-            if (++count % 100 == 0) {
+            if (++count % 10000 == 0) {
                 cavern.print(true)
                 print("\n\n")
             }
